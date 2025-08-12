@@ -12,7 +12,7 @@ from docxtpl import DocxTemplate, InlineImage
 from docx.shared import Cm
 from staticmap import StaticMap, CircleMarker
 
-def get_map_png_bytes(lon, lat, buffer_m=300, width_px=900, height_px=700, zoom=18):
+def get_map_png_bytes(lon, lat, buffer_m=300, width_px=900, height_px=700, zoom=17):
     """
     Genera un PNG (bytes) de un mapa satelital con marcador en (lon, lat).
     - buffer_m: radio en metros alrededor del punto (controla "zoom").
@@ -31,7 +31,7 @@ def get_map_png_bytes(lon, lat, buffer_m=300, width_px=900, height_px=700, zoom=
     ax.set_ylim(bbox[1], bbox[3])
 
     # Añadir basemap (Esri World Imagery)
-    cx.add_basemap(ax, source=cx.providers.Esri.WorldImagery, crs="EPSG:3857", zoom=zoom)
+    cx.add_basemap(ax, source=cx.providers.Esri.WorldImageryClarity, crs="EPSG:3857", zoom=zoom)
 
     # Dibujar marcador
     gdf.plot(ax=ax, markersize=40, color="red")
@@ -345,7 +345,7 @@ elif st.session_state.step == 5:
                     lat = st.session_state.data.get('latitud', 0)
                     lon = st.session_state.data.get('longitud', 0)
                     
-                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=18)
+                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
                     
                     buf_map = io.BytesIO(png_bytes)
                     buf_map.seek(0)
@@ -427,7 +427,7 @@ elif st.session_state.step == 5:
                     lat = float(datos['latitud'])
                     lon = float(datos['longitud'])
                     
-                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=18)
+                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
                     
                     buf_map = io.BytesIO(png_bytes)
                     buf_map.seek(0)
