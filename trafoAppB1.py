@@ -31,7 +31,7 @@ def get_map_png_bytes(lon, lat, buffer_m=300, width_px=900, height_px=700, zoom=
     ax.set_ylim(bbox[1], bbox[3])
 
     # Añadir basemap (Esri World Imagery)
-    cx.add_basemap(ax, source=cx.providers.Esri.WorldImageryClarity, crs="EPSG:3857", zoom=zoom)
+    cx.add_basemap(ax, source=cx.providers.Esri.WorldImagery, crs="EPSG:3857", zoom=zoom)
 
     # Dibujar marcador
     gdf.plot(ax=ax, markersize=40, color="red")
@@ -404,10 +404,10 @@ elif st.session_state.step == 5:
             
         if st.session_state.data['tipoCoordenada'] == "Urbano":
         
-            if datos.get('latitud') and datos.get('longitud'):
+            if st.session_state.data['latitud'] and st.session_state.data['longitud']:
                 try:
-                    lat = float(datos['latitud'])
-                    lon = float(datos['longitud'])
+                    lat = float(str(datos['latitud']).replace(',', '.'))
+                    lon = float(str(datos['longitud']).replace(',', '.'))
                     mapa = StaticMap(600, 400)
                     mapa.add_marker(CircleMarker((lon, lat), 'red', 12))
                     img_map = mapa.render()
@@ -419,16 +419,20 @@ elif st.session_state.step == 5:
                     st.error(f"Coordenadas inválidas para el mapa. {e}")
             else:
                 st.error("Faltan coordenadas para el mapa.")
-                
+                    
         else:
-            
-            if datos.get('latitud') and datos.get('longitud'):
+                
+            if st.session_state.data['latitud'] and st.session_state.data['longitud']:
                 try:
-                    lat = float(datos['latitud'])
-                    lon = float(datos['longitud'])
+                    lat = float(str(st.session_state.data['latitud']).replace(',', '.'))
                     
+                    lon = float(str(st.session_state.data['longitud']).replace(',', '.'))
+                    
+                    st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
+                    st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
+                        
                     png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
-                    
+                        
                     buf_map = io.BytesIO(png_bytes)
                     buf_map.seek(0)
                     datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
