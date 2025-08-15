@@ -322,10 +322,10 @@ elif st.session_state.step == 5:
             
         if st.session_state.data['tipoCoordenada'] == "Urbano":
         
-            if datos.get('latitud') and datos.get('longitud'):
+            if st.session_state.data['latitud'] and st.session_state.data['longitud']:
                 try:
-                    lat = float(datos['latitud'])
-                    lon = float(datos['longitud'])
+                    lat = float(str(datos['latitud']).replace(',', '.'))
+                    lon = float(str(datos['longitud']).replace(',', '.'))
                     mapa = StaticMap(600, 400)
                     mapa.add_marker(CircleMarker((lon, lat), 'red', 12))
                     img_map = mapa.render()
@@ -333,25 +333,29 @@ elif st.session_state.step == 5:
                     img_map.save(buf_map, format='PNG')
                     buf_map.seek(0)
                     datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
-                except:
-                    st.error("Coordenadas inválidas para el mapa.")
+                except Exception as e:
+                    st.error(f"Coordenadas inválidas para el mapa. {e}")
             else:
                 st.error("Faltan coordenadas para el mapa.")
-                
+                    
         else:
-            
-            if datos.get('latitud') and datos.get('longitud'):
+                
+            if st.session_state.data['latitud'] and st.session_state.data['longitud']:
                 try:
-                    lat = st.session_state.data.get('latitud', 0)
-                    lon = st.session_state.data.get('longitud', 0)
+                    lat = float(str(st.session_state.data['latitud']).replace(',', '.'))
                     
-                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
+                    lon = float(str(st.session_state.data['longitud']).replace(',', '.'))
                     
+                    st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
+                    st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
+                        
+                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=16)
+                        
                     buf_map = io.BytesIO(png_bytes)
                     buf_map.seek(0)
                     datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
-                except:
-                    st.error("Coordenadas inválidas para el mapa.")
+                except Exception as e:
+                    st.error(f"Coordenadas inválidas para el mapa. {e}")
             else:
                 st.error("Faltan coordenadas para el mapa.")
             
@@ -431,7 +435,7 @@ elif st.session_state.step == 5:
                     st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
                     st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
                         
-                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
+                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=16)
                         
                     buf_map = io.BytesIO(png_bytes)
                     buf_map.seek(0)
