@@ -451,7 +451,7 @@ elif st.session_state.step == 5:
         doc = st.session_state.doc
         # Añadir fecha al contexto
         ahora = datetime.now()
-        meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
+        meses = ["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"]
         datos['dia'] = ahora.day
         datos['mes'] = meses[ahora.month-1]
         datos['anio'] = ahora.year
