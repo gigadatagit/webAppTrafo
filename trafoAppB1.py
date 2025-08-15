@@ -349,7 +349,7 @@ elif st.session_state.step == 5:
                     st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
                     st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
                         
-                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=16)
+                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
                         
                     buf_map = io.BytesIO(png_bytes)
                     buf_map.seek(0)
@@ -435,7 +435,7 @@ elif st.session_state.step == 5:
                     st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
                     st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
                         
-                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=16)
+                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
                         
                     buf_map = io.BytesIO(png_bytes)
                     buf_map.seek(0)
