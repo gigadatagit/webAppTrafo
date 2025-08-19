@@ -272,16 +272,13 @@ elif st.session_state.step == 5:
         uploaded_FichaTecTrafo = st.file_uploader(f"Imagen de Ficha Técnica del Trafo", type=['png','jpg','jpeg'], key=key_FichaTecTrafo)
         
         key_ImagenPrueba1 = "imgPruebaMon1"
-        uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
+        uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 (Alta VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
         
         key_ImagenPrueba2 = "imgPruebaMon2"
-        uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
+        uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 (Alta VS Baja) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
         
         key_ImagenPrueba3 = "imgPruebaMon3"
-        uploaded_Prueba3 = st.file_uploader(f"Imagen de Prueba #3 del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba3)
-        
-        key_ImagenPrueba4 = "imgPruebaMon4"
-        uploaded_Prueba4 = st.file_uploader(f"Imagen de Prueba #4 del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba4)
+        uploaded_Prueba3 = st.file_uploader(f"Imagen de Prueba #3 (Baja VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba3)
         
         
         if uploaded_FichaTecTrafo:
@@ -312,13 +309,6 @@ elif st.session_state.step == 5:
             datos[key_ImagenPrueba3] = InlineImage(st.session_state.doc, buf, Cm(14))
         else:
             datos[key_ImagenPrueba3] = None
-            
-        if uploaded_Prueba4:
-            buf = io.BytesIO(uploaded_Prueba4.read())
-            buf.seek(0)
-            datos[key_ImagenPrueba4] = InlineImage(st.session_state.doc, buf, Cm(14))
-        else:
-            datos[key_ImagenPrueba4] = None
             
         if st.session_state.data['tipoCoordenada'] == "Urbano":
         
@@ -368,13 +358,10 @@ elif st.session_state.step == 5:
         uploaded_FichaTecTrafo = st.file_uploader(f"Imagen de Ficha Técnica del Trafo", type=['png','jpg','jpeg'], key=key_FichaTecTrafo)
         
         key_ImagenPrueba1 = "imgPruebaMon1"
-        uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
+        uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 (Alta VS Baja) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
         
         key_ImagenPrueba2 = "imgPruebaMon2"
-        uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
-        
-        key_ImagenPrueba3 = "imgPruebaMon3"
-        uploaded_Prueba3 = st.file_uploader(f"Imagen de Prueba #3 del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba3)
+        uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 (Baja VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
         
         
         if uploaded_FichaTecTrafo:
@@ -398,13 +385,6 @@ elif st.session_state.step == 5:
             datos[key_ImagenPrueba2] = InlineImage(st.session_state.doc, buf, Cm(14))
         else:
             datos[key_ImagenPrueba2] = None
-            
-        if uploaded_Prueba3:
-            buf = io.BytesIO(uploaded_Prueba3.read())
-            buf.seek(0)
-            datos[key_ImagenPrueba3] = InlineImage(st.session_state.doc, buf, Cm(14))
-        else:
-            datos[key_ImagenPrueba3] = None
             
         if st.session_state.data['tipoCoordenada'] == "Urbano":
         
