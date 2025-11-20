@@ -155,6 +155,7 @@ elif st.session_state.step == 2:
     st.session_state.data['nroTransformador'] = st.text_input("Número del Transformador", key='nro_transformador')
     st.session_state.data['capacidadTransformador'] = st.text_input("Capacidad del Transformador [kVA]", key='capacidad_transformador')
     st.session_state.data['tipoTransformador'] = st.selectbox("Tipo de Transformador", ["Trifásico", "Monofásico"], key='tipotrafo')
+    st.session_state.data['ubicacionTransformador'] = st.selectbox("Ubicación del Transformador", ["Pedestal", "Poste"], key='ubicaciontrafo')
     st.session_state.data['tipoAislamiento'] = st.selectbox("Tipo de Aislamiento", ["Aceite", "Seco"], key='tipoaislamiento')
     st.session_state.data['voltajePrimario'] = st.text_input("Voltaje Primario [V]", key='voltprimario')
     st.session_state.data['voltajeSecundario'] = st.text_input("Voltaje Secundario [V]", key='voltsecundario')
@@ -168,9 +169,16 @@ elif st.session_state.step == 2:
         prev_step()
     if cols[1].button("Siguiente"):
         
-        if st.session_state.data['tipoTransformador'] == "Trifásico":
-            
+        if st.session_state.data['tipoTransformador'] == "Trifásico" and st.session_state.data['ubicacionTransformador'] == "Pedestal":
         
+            template_path = 'templates/templateTRAFO3FS.docx'
+            
+        elif st.session_state.data['tipoTransformador'] == "Trifásico" and st.session_state.data['ubicacionTransformador'] == "Poste":
+            
+            template_path = 'templates/templateTRAFO3FS.docx'
+            
+        elif st.session_state.data['tipoTransformador'] == "Monofásico" and st.session_state.data['ubicacionTransformador'] == "Poste":
+            
             template_path = 'templates/templateTRAFO3FS.docx'
             
         else:
@@ -211,42 +219,92 @@ elif st.session_state.step == 4:
     st.header("Paso 4: Detalles de la tabla de Resistencia de Aislamiento")
     
     if st.session_state.data['carTrafo_NroFases'] == 3:
+        
+        if st.session_state.data['ubicacionTransformador'] == "Pedestal":
     
-        st.session_state.data['resMedida_AVST'] = st.number_input("Resistencia Medida - Alta VS. Tierra [GΩ]", key='res_medida_avst', min_value=0.0, format="%.2f")
-        st.session_state.data['resReferida_AVST'] = st.session_state.data['resMedida_AVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
-        st.session_state.data['resMedida_AVSB'] = st.number_input("Resistencia Medida - Alta VS. Baja [GΩ]", key='res_medida_avsb', min_value=0.0, format="%.2f")
-        st.session_state.data['resReferida_AVSB'] = st.session_state.data['resMedida_AVSB']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
-        st.session_state.data['resMedida_BVST'] = st.number_input("Resistencia Medida - Baja VS. Tierra [GΩ]", key='res_medida_bvst', min_value=0.0, format="%.2f")
-        st.session_state.data['resReferida_BVST'] = st.session_state.data['resMedida_BVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
-        
-        st.session_state.data['resEsp_AVST'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
-        st.session_state.data['resEsp_AVSB'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
-        st.session_state.data['resEsp_BVST'] = 1 if st.session_state.data['tipoAislamiento'] == "Aceite" else 5
-        
-        st.session_state.data['resultado_AVST'] = 'Cumple' if st.session_state.data['resReferida_AVST'] >= st.session_state.data['resEsp_AVST'] else 'No Cumple'
-        st.session_state.data['resultado_AVSB'] = 'Cumple' if st.session_state.data['resReferida_AVSB'] >= st.session_state.data['resEsp_AVSB'] else 'No Cumple'
-        st.session_state.data['resultado_BVST'] = 'Cumple' if st.session_state.data['resReferida_BVST'] >= st.session_state.data['resEsp_BVST'] else 'No Cumple'
-        
-        st.session_state.data['comentariosPrueba'] = st.text_area("Comentarios de la Prueba", key='comentarios_prueba')
+            st.session_state.data['resMedida_AVST'] = st.number_input("Resistencia Medida - Alta VS. Tierra [GΩ]", key='res_medida_avst', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_AVST'] = st.session_state.data['resMedida_AVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            st.session_state.data['resMedida_AVSB'] = st.number_input("Resistencia Medida - Alta VS. Baja [GΩ]", key='res_medida_avsb', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_AVSB'] = st.session_state.data['resMedida_AVSB']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            st.session_state.data['resMedida_BVST'] = st.number_input("Resistencia Medida - Baja VS. Tierra [GΩ]", key='res_medida_bvst', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_BVST'] = st.session_state.data['resMedida_BVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            
+            st.session_state.data['resEsp_AVST'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
+            st.session_state.data['resEsp_AVSB'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
+            st.session_state.data['resEsp_BVST'] = 1 if st.session_state.data['tipoAislamiento'] == "Aceite" else 5
+            
+            st.session_state.data['resultado_AVST'] = 'Cumple' if st.session_state.data['resReferida_AVST'] >= st.session_state.data['resEsp_AVST'] else 'No Cumple'
+            st.session_state.data['resultado_AVSB'] = 'Cumple' if st.session_state.data['resReferida_AVSB'] >= st.session_state.data['resEsp_AVSB'] else 'No Cumple'
+            st.session_state.data['resultado_BVST'] = 'Cumple' if st.session_state.data['resReferida_BVST'] >= st.session_state.data['resEsp_BVST'] else 'No Cumple'
+            
+            st.session_state.data['comentariosPrueba'] = st.text_area("Comentarios de la Prueba", key='comentarios_prueba')
+            
+        elif st.session_state.data['ubicacionTransformador'] == "Poste":
+            
+            st.session_state.data['resMedida_AVST'] = st.number_input("Resistencia Medida - Alta VS. Tierra [GΩ]", key='res_medida_avst', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_AVST'] = st.session_state.data['resMedida_AVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            st.session_state.data['resMedida_AVSB'] = st.number_input("Resistencia Medida - Alta VS. Baja [GΩ]", key='res_medida_avsb', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_AVSB'] = st.session_state.data['resMedida_AVSB']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            st.session_state.data['resMedida_BVST'] = st.number_input("Resistencia Medida - Baja VS. Tierra [GΩ]", key='res_medida_bvst', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_BVST'] = st.session_state.data['resMedida_BVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            
+            st.session_state.data['resEsp_AVST'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
+            st.session_state.data['resEsp_AVSB'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
+            st.session_state.data['resEsp_BVST'] = 1 if st.session_state.data['tipoAislamiento'] == "Aceite" else 5
+            
+            st.session_state.data['resultado_AVST'] = 'Cumple' if st.session_state.data['resReferida_AVST'] >= st.session_state.data['resEsp_AVST'] else 'No Cumple'
+            st.session_state.data['resultado_AVSB'] = 'Cumple' if st.session_state.data['resReferida_AVSB'] >= st.session_state.data['resEsp_AVSB'] else 'No Cumple'
+            st.session_state.data['resultado_BVST'] = 'Cumple' if st.session_state.data['resReferida_BVST'] >= st.session_state.data['resEsp_BVST'] else 'No Cumple'
+            
+            st.session_state.data['comentariosPrueba'] = st.text_area("Comentarios de la Prueba", key='comentarios_prueba')
+            
+        else:
+            
+            st.error("Ubicación del Transformador no válida.")
         
     else:
         
-        st.session_state.data['resMedida_AVST'] = st.text_input("Resistencia Medida - Alta VS. Tierra [GΩ]", key='res_medida_avst', value='-', disabled=True)
-        st.session_state.data['resReferida_AVST'] = '-'
-        st.session_state.data['resMedida_AVSB'] = st.number_input("Resistencia Medida - Alta VS. Baja [GΩ]", key='res_medida_avsb', min_value=0.0, format="%.2f")
-        st.session_state.data['resReferida_AVSB'] = st.session_state.data['resMedida_AVSB']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
-        st.session_state.data['resMedida_BVST'] = st.number_input("Resistencia Medida - Baja VS. Tierra [GΩ]", key='res_medida_bvst', min_value=0.0, format="%.2f")
-        st.session_state.data['resReferida_BVST'] = st.session_state.data['resMedida_BVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+        if st.session_state.data['ubicacionTransformador'] == "Pedestal":
         
-        st.session_state.data['resEsp_AVST'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
-        st.session_state.data['resEsp_AVSB'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
-        st.session_state.data['resEsp_BVST'] = 1 if st.session_state.data['tipoAislamiento'] == "Aceite" else 5
-        
-        st.session_state.data['resultado_AVST'] = 'Cumple'
-        st.session_state.data['resultado_AVSB'] = 'Cumple' if st.session_state.data['resReferida_AVSB'] >= st.session_state.data['resEsp_AVSB'] else 'No Cumple'
-        st.session_state.data['resultado_BVST'] = 'Cumple' if st.session_state.data['resReferida_BVST'] >= st.session_state.data['resEsp_BVST'] else 'No Cumple'
-        
-        st.session_state.data['comentariosPrueba'] = st.text_area("Comentarios de la Prueba", key='comentarios_prueba')
+            st.session_state.data['resMedida_AVST'] = st.text_input("Resistencia Medida - Alta VS. Tierra [GΩ]", key='res_medida_avst', value='-', disabled=True)
+            st.session_state.data['resReferida_AVST'] = '-'
+            st.session_state.data['resMedida_AVSB'] = st.number_input("Resistencia Medida - Alta VS. Baja [GΩ]", key='res_medida_avsb', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_AVSB'] = st.session_state.data['resMedida_AVSB']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            st.session_state.data['resMedida_BVST'] = st.number_input("Resistencia Medida - Baja VS. Tierra [GΩ]", key='res_medida_bvst', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_BVST'] = st.session_state.data['resMedida_BVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            
+            st.session_state.data['resEsp_AVST'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
+            st.session_state.data['resEsp_AVSB'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
+            st.session_state.data['resEsp_BVST'] = 1 if st.session_state.data['tipoAislamiento'] == "Aceite" else 5
+            
+            st.session_state.data['resultado_AVST'] = 'Cumple'
+            st.session_state.data['resultado_AVSB'] = 'Cumple' if st.session_state.data['resReferida_AVSB'] >= st.session_state.data['resEsp_AVSB'] else 'No Cumple'
+            st.session_state.data['resultado_BVST'] = 'Cumple' if st.session_state.data['resReferida_BVST'] >= st.session_state.data['resEsp_BVST'] else 'No Cumple'
+            
+            st.session_state.data['comentariosPrueba'] = st.text_area("Comentarios de la Prueba", key='comentarios_prueba')
+            
+        elif st.session_state.data['ubicacionTransformador'] == "Poste":
+            
+            st.session_state.data['resMedida_AVST'] = st.number_input("Resistencia Medida - Alta VS. Tierra [GΩ]", key='res_medida_avst', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_AVST'] = st.session_state.data['resMedida_AVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            st.session_state.data['resMedida_AVSB'] = st.number_input("Resistencia Medida - Alta VS. Baja [GΩ]", key='res_medida_avsb', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_AVSB'] = st.session_state.data['resMedida_AVSB']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            st.session_state.data['resMedida_BVST'] = st.number_input("Resistencia Medida - Baja VS. Tierra [GΩ]", key='res_medida_bvst', min_value=0.0, format="%.2f")
+            st.session_state.data['resReferida_BVST'] = st.session_state.data['resMedida_BVST']  * obtener_valor_por_temperatura(temperatura_prueba=float(st.session_state.data.get('temperaturaPrueba', 0)), tipo_aislamiento=st.session_state.data.get('tipoAislamiento', 'NA'))
+            
+            st.session_state.data['resEsp_AVST'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
+            st.session_state.data['resEsp_AVSB'] = 5 if st.session_state.data['tipoAislamiento'] == "Aceite" else 25
+            st.session_state.data['resEsp_BVST'] = 1 if st.session_state.data['tipoAislamiento'] == "Aceite" else 5
+            
+            st.session_state.data['resultado_AVST'] = 'Cumple' if st.session_state.data['resReferida_AVST'] >= st.session_state.data['resEsp_AVST'] else 'No Cumple'
+            st.session_state.data['resultado_AVSB'] = 'Cumple' if st.session_state.data['resReferida_AVSB'] >= st.session_state.data['resEsp_AVSB'] else 'No Cumple'
+            st.session_state.data['resultado_BVST'] = 'Cumple' if st.session_state.data['resReferida_BVST'] >= st.session_state.data['resEsp_BVST'] else 'No Cumple'
+            
+            st.session_state.data['comentariosPrueba'] = st.text_area("Comentarios de la Prueba", key='comentarios_prueba')
+            
+        else:
+            
+            st.error("Ubicación del Transformador no válida.")
 
     cols = st.columns([1,1,1])
     if cols[0].button("Anterior"):
@@ -264,167 +322,351 @@ elif st.session_state.step == 5:
 
 
     if st.session_state.data['carTrafo_NroFases'] == 3:
+        
+        if st.session_state.data['ubicacionTransformador'] == "Pedestal":
+            
 
-        # Subida de imágenes por tramo
-        st.subheader("Imágenes de Pruebas del Transformador")
-        
-        key_FichaTecTrafo = "imgFichaTecnicaTrafo"
-        uploaded_FichaTecTrafo = st.file_uploader(f"Imagen de Ficha Técnica del Trafo", type=['png','jpg','jpeg'], key=key_FichaTecTrafo)
-        
-        key_ImagenPrueba1 = "imgPruebaMon1"
-        uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 (Alta VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
-        
-        key_ImagenPrueba2 = "imgPruebaMon2"
-        uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 (Alta VS Baja) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
-        
-        key_ImagenPrueba3 = "imgPruebaMon3"
-        uploaded_Prueba3 = st.file_uploader(f"Imagen de Prueba #3 (Baja VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba3)
-        
-        
-        if uploaded_FichaTecTrafo:
-            buf = io.BytesIO(uploaded_FichaTecTrafo.read())
-            buf.seek(0)
-            datos[key_FichaTecTrafo] = InlineImage(st.session_state.doc, buf, Cm(14))
-        else:
-            datos[key_FichaTecTrafo] = None
+            # Subida de imágenes por tramo
+            st.subheader("Imágenes de Pruebas del Transformador")
+            
+            key_FichaTecTrafo = "imgFichaTecnicaTrafo"
+            uploaded_FichaTecTrafo = st.file_uploader(f"Imagen de Ficha Técnica del Trafo", type=['png','jpg','jpeg'], key=key_FichaTecTrafo)
+            
+            key_ImagenPrueba1 = "imgPruebaMon1"
+            uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 (Alta VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
+            
+            key_ImagenPrueba2 = "imgPruebaMon2"
+            uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 (Alta VS Baja) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
+            
+            key_ImagenPrueba3 = "imgPruebaMon3"
+            uploaded_Prueba3 = st.file_uploader(f"Imagen de Prueba #3 (Baja VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba3)
             
             
-        if uploaded_Prueba1:
-            buf = io.BytesIO(uploaded_Prueba1.read())
-            buf.seek(0)
-            datos[key_ImagenPrueba1] = InlineImage(st.session_state.doc, buf, Cm(14))
-        else:
-            datos[key_ImagenPrueba1] = None
-            
-        if uploaded_Prueba2:
-            buf = io.BytesIO(uploaded_Prueba2.read())
-            buf.seek(0)
-            datos[key_ImagenPrueba2] = InlineImage(st.session_state.doc, buf, Cm(14))
-        else:
-            datos[key_ImagenPrueba2] = None
-            
-        if uploaded_Prueba3:
-            buf = io.BytesIO(uploaded_Prueba3.read())
-            buf.seek(0)
-            datos[key_ImagenPrueba3] = InlineImage(st.session_state.doc, buf, Cm(14))
-        else:
-            datos[key_ImagenPrueba3] = None
-            
-        if st.session_state.data['tipoCoordenada'] == "Urbano":
-        
-            if st.session_state.data['latitud'] and st.session_state.data['longitud']:
-                try:
-                    lat = float(str(datos['latitud']).replace(',', '.'))
-                    lon = float(str(datos['longitud']).replace(',', '.'))
-                    mapa = StaticMap(600, 400)
-                    mapa.add_marker(CircleMarker((lon, lat), 'red', 12))
-                    img_map = mapa.render()
-                    buf_map = io.BytesIO()
-                    img_map.save(buf_map, format='PNG')
-                    buf_map.seek(0)
-                    datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
-                except Exception as e:
-                    st.error(f"Coordenadas inválidas para el mapa. {e}")
+            if uploaded_FichaTecTrafo:
+                buf = io.BytesIO(uploaded_FichaTecTrafo.read())
+                buf.seek(0)
+                datos[key_FichaTecTrafo] = InlineImage(st.session_state.doc, buf, Cm(14))
             else:
-                st.error("Faltan coordenadas para el mapa.")
-                    
-        else:
+                datos[key_FichaTecTrafo] = None
                 
-            if st.session_state.data['latitud'] and st.session_state.data['longitud']:
-                try:
-                    lat = float(str(st.session_state.data['latitud']).replace(',', '.'))
-                    
-                    lon = float(str(st.session_state.data['longitud']).replace(',', '.'))
-                    
-                    st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
-                    st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
-                        
-                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
-                        
-                    buf_map = io.BytesIO(png_bytes)
-                    buf_map.seek(0)
-                    datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
-                except Exception as e:
-                    st.error(f"Coordenadas inválidas para el mapa. {e}")
+                
+            if uploaded_Prueba1:
+                buf = io.BytesIO(uploaded_Prueba1.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba1] = InlineImage(st.session_state.doc, buf, Cm(14))
             else:
-                st.error("Faltan coordenadas para el mapa.")
+                datos[key_ImagenPrueba1] = None
+                
+            if uploaded_Prueba2:
+                buf = io.BytesIO(uploaded_Prueba2.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba2] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_ImagenPrueba2] = None
+                
+            if uploaded_Prueba3:
+                buf = io.BytesIO(uploaded_Prueba3.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba3] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_ImagenPrueba3] = None
+                
+            if st.session_state.data['tipoCoordenada'] == "Urbano":
+            
+                if st.session_state.data['latitud'] and st.session_state.data['longitud']:
+                    try:
+                        lat = float(str(datos['latitud']).replace(',', '.'))
+                        lon = float(str(datos['longitud']).replace(',', '.'))
+                        mapa = StaticMap(600, 400)
+                        mapa.add_marker(CircleMarker((lon, lat), 'red', 12))
+                        img_map = mapa.render()
+                        buf_map = io.BytesIO()
+                        img_map.save(buf_map, format='PNG')
+                        buf_map.seek(0)
+                        datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
+                    except Exception as e:
+                        st.error(f"Coordenadas inválidas para el mapa. {e}")
+                else:
+                    st.error("Faltan coordenadas para el mapa.")
+                        
+            else:
+                    
+                if st.session_state.data['latitud'] and st.session_state.data['longitud']:
+                    try:
+                        lat = float(str(st.session_state.data['latitud']).replace(',', '.'))
+                        
+                        lon = float(str(st.session_state.data['longitud']).replace(',', '.'))
+                        
+                        st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
+                        st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
+                            
+                        png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
+                            
+                        buf_map = io.BytesIO(png_bytes)
+                        buf_map.seek(0)
+                        datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
+                    except Exception as e:
+                        st.error(f"Coordenadas inválidas para el mapa. {e}")
+                else:
+                    st.error("Faltan coordenadas para el mapa.")
+        
+        elif st.session_state.data['ubicacionTransformador'] == "Poste":
+            
+            # Subida de imágenes por tramo
+            st.subheader("Imágenes de Pruebas del Transformador")
+            
+            key_FichaTecTrafo = "imgFichaTecnicaTrafo"
+            uploaded_FichaTecTrafo = st.file_uploader(f"Imagen de Ficha Técnica del Trafo", type=['png','jpg','jpeg'], key=key_FichaTecTrafo)
+            
+            key_ImagenPrueba1 = "imgPruebaMon1"
+            uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 (Alta VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
+            
+            key_ImagenPrueba2 = "imgPruebaMon2"
+            uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 (Alta VS Baja) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
+            
+            key_ImagenPrueba3 = "imgPruebaMon3"
+            uploaded_Prueba3 = st.file_uploader(f"Imagen de Prueba #3 (Baja VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba3)
+            
+            
+            if uploaded_FichaTecTrafo:
+                buf = io.BytesIO(uploaded_FichaTecTrafo.read())
+                buf.seek(0)
+                datos[key_FichaTecTrafo] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_FichaTecTrafo] = None
+                
+                
+            if uploaded_Prueba1:
+                buf = io.BytesIO(uploaded_Prueba1.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba1] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_ImagenPrueba1] = None
+                
+            if uploaded_Prueba2:
+                buf = io.BytesIO(uploaded_Prueba2.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba2] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_ImagenPrueba2] = None
+                
+            if uploaded_Prueba3:
+                buf = io.BytesIO(uploaded_Prueba3.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba3] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_ImagenPrueba3] = None
+                
+            if st.session_state.data['tipoCoordenada'] == "Urbano":
+            
+                if st.session_state.data['latitud'] and st.session_state.data['longitud']:
+                    try:
+                        lat = float(str(datos['latitud']).replace(',', '.'))
+                        lon = float(str(datos['longitud']).replace(',', '.'))
+                        mapa = StaticMap(600, 400)
+                        mapa.add_marker(CircleMarker((lon, lat), 'red', 12))
+                        img_map = mapa.render()
+                        buf_map = io.BytesIO()
+                        img_map.save(buf_map, format='PNG')
+                        buf_map.seek(0)
+                        datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
+                    except Exception as e:
+                        st.error(f"Coordenadas inválidas para el mapa. {e}")
+                else:
+                    st.error("Faltan coordenadas para el mapa.")
+                        
+            else:
+                    
+                if st.session_state.data['latitud'] and st.session_state.data['longitud']:
+                    try:
+                        lat = float(str(st.session_state.data['latitud']).replace(',', '.'))
+                        
+                        lon = float(str(st.session_state.data['longitud']).replace(',', '.'))
+                        
+                        st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
+                        st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
+                            
+                        png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
+                            
+                        buf_map = io.BytesIO(png_bytes)
+                        buf_map.seek(0)
+                        datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
+                    except Exception as e:
+                        st.error(f"Coordenadas inválidas para el mapa. {e}")
+                else:
+                    st.error("Faltan coordenadas para el mapa.")
+        
+        else:
+            
+            st.error("Ubicación del Transformador no válida.")
             
     else:
         
-        # Subida de imágenes por tramo
-        st.subheader("Imágenes de Pruebas del Transformador")
-        
-        key_FichaTecTrafo = "imgFichaTecnicaTrafo"
-        uploaded_FichaTecTrafo = st.file_uploader(f"Imagen de Ficha Técnica del Trafo", type=['png','jpg','jpeg'], key=key_FichaTecTrafo)
-        
-        key_ImagenPrueba1 = "imgPruebaMon1"
-        uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 (Alta VS Baja) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
-        
-        key_ImagenPrueba2 = "imgPruebaMon2"
-        uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 (Baja VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
-        
-        
-        if uploaded_FichaTecTrafo:
-            buf = io.BytesIO(uploaded_FichaTecTrafo.read())
-            buf.seek(0)
-            datos[key_FichaTecTrafo] = InlineImage(st.session_state.doc, buf, Cm(14))
-        else:
-            datos[key_FichaTecTrafo] = None
+        if st.session_state.data['ubicacionTransformador'] == "Poste":
+            
+            # Subida de imágenes por tramo
+            st.subheader("Imágenes de Pruebas del Transformador")
+            
+            key_FichaTecTrafo = "imgFichaTecnicaTrafo"
+            uploaded_FichaTecTrafo = st.file_uploader(f"Imagen de Ficha Técnica del Trafo", type=['png','jpg','jpeg'], key=key_FichaTecTrafo)
+            
+            key_ImagenPrueba1 = "imgPruebaMon1"
+            uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 (Alta VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
+            
+            key_ImagenPrueba2 = "imgPruebaMon2"
+            uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 (Alta VS Baja) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
+            
+            key_ImagenPrueba3 = "imgPruebaMon3"
+            uploaded_Prueba3 = st.file_uploader(f"Imagen de Prueba #3 (Baja VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba3)
             
             
-        if uploaded_Prueba1:
-            buf = io.BytesIO(uploaded_Prueba1.read())
-            buf.seek(0)
-            datos[key_ImagenPrueba1] = InlineImage(st.session_state.doc, buf, Cm(14))
-        else:
-            datos[key_ImagenPrueba1] = None
-            
-        if uploaded_Prueba2:
-            buf = io.BytesIO(uploaded_Prueba2.read())
-            buf.seek(0)
-            datos[key_ImagenPrueba2] = InlineImage(st.session_state.doc, buf, Cm(14))
-        else:
-            datos[key_ImagenPrueba2] = None
-            
-        if st.session_state.data['tipoCoordenada'] == "Urbano":
-        
-            if st.session_state.data['latitud'] and st.session_state.data['longitud']:
-                try:
-                    lat = float(str(datos['latitud']).replace(',', '.'))
-                    lon = float(str(datos['longitud']).replace(',', '.'))
-                    mapa = StaticMap(600, 400)
-                    mapa.add_marker(CircleMarker((lon, lat), 'red', 12))
-                    img_map = mapa.render()
-                    buf_map = io.BytesIO()
-                    img_map.save(buf_map, format='PNG')
-                    buf_map.seek(0)
-                    datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
-                except Exception as e:
-                    st.error(f"Coordenadas inválidas para el mapa. {e}")
+            if uploaded_FichaTecTrafo:
+                buf = io.BytesIO(uploaded_FichaTecTrafo.read())
+                buf.seek(0)
+                datos[key_FichaTecTrafo] = InlineImage(st.session_state.doc, buf, Cm(14))
             else:
-                st.error("Faltan coordenadas para el mapa.")
-                    
-        else:
+                datos[key_FichaTecTrafo] = None
                 
-            if st.session_state.data['latitud'] and st.session_state.data['longitud']:
-                try:
-                    lat = float(str(st.session_state.data['latitud']).replace(',', '.'))
-                    
-                    lon = float(str(st.session_state.data['longitud']).replace(',', '.'))
-                    
-                    st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
-                    st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
-                        
-                    png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
-                        
-                    buf_map = io.BytesIO(png_bytes)
-                    buf_map.seek(0)
-                    datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
-                except Exception as e:
-                    st.error(f"Coordenadas inválidas para el mapa. {e}")
+                
+            if uploaded_Prueba1:
+                buf = io.BytesIO(uploaded_Prueba1.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba1] = InlineImage(st.session_state.doc, buf, Cm(14))
             else:
-                st.error("Faltan coordenadas para el mapa.")
+                datos[key_ImagenPrueba1] = None
+                
+            if uploaded_Prueba2:
+                buf = io.BytesIO(uploaded_Prueba2.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba2] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_ImagenPrueba2] = None
+                
+            if uploaded_Prueba3:
+                buf = io.BytesIO(uploaded_Prueba3.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba3] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_ImagenPrueba3] = None
+                
+            if st.session_state.data['tipoCoordenada'] == "Urbano":
+            
+                if st.session_state.data['latitud'] and st.session_state.data['longitud']:
+                    try:
+                        lat = float(str(datos['latitud']).replace(',', '.'))
+                        lon = float(str(datos['longitud']).replace(',', '.'))
+                        mapa = StaticMap(600, 400)
+                        mapa.add_marker(CircleMarker((lon, lat), 'red', 12))
+                        img_map = mapa.render()
+                        buf_map = io.BytesIO()
+                        img_map.save(buf_map, format='PNG')
+                        buf_map.seek(0)
+                        datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
+                    except Exception as e:
+                        st.error(f"Coordenadas inválidas para el mapa. {e}")
+                else:
+                    st.error("Faltan coordenadas para el mapa.")
+                        
+            else:
+                    
+                if st.session_state.data['latitud'] and st.session_state.data['longitud']:
+                    try:
+                        lat = float(str(st.session_state.data['latitud']).replace(',', '.'))
+                        
+                        lon = float(str(st.session_state.data['longitud']).replace(',', '.'))
+                        
+                        st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
+                        st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
+                            
+                        png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
+                            
+                        buf_map = io.BytesIO(png_bytes)
+                        buf_map.seek(0)
+                        datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
+                    except Exception as e:
+                        st.error(f"Coordenadas inválidas para el mapa. {e}")
+                else:
+                    st.error("Faltan coordenadas para el mapa.")
+                    
+        elif st.session_state.data['ubicacionTransformador'] == "Pedestal":
+        
+            # Subida de imágenes por tramo
+            st.subheader("Imágenes de Pruebas del Transformador")
+            
+            key_FichaTecTrafo = "imgFichaTecnicaTrafo"
+            uploaded_FichaTecTrafo = st.file_uploader(f"Imagen de Ficha Técnica del Trafo", type=['png','jpg','jpeg'], key=key_FichaTecTrafo)
+            
+            key_ImagenPrueba1 = "imgPruebaMon1"
+            uploaded_Prueba1 = st.file_uploader(f"Imagen de Prueba #1 (Alta VS Baja) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba1)
+            
+            key_ImagenPrueba2 = "imgPruebaMon2"
+            uploaded_Prueba2 = st.file_uploader(f"Imagen de Prueba #2 (Baja VS Tierra) del Trafo", type=['png','jpg','jpeg'], key=key_ImagenPrueba2)
+            
+            
+            if uploaded_FichaTecTrafo:
+                buf = io.BytesIO(uploaded_FichaTecTrafo.read())
+                buf.seek(0)
+                datos[key_FichaTecTrafo] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_FichaTecTrafo] = None
+                
+                
+            if uploaded_Prueba1:
+                buf = io.BytesIO(uploaded_Prueba1.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba1] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_ImagenPrueba1] = None
+                
+            if uploaded_Prueba2:
+                buf = io.BytesIO(uploaded_Prueba2.read())
+                buf.seek(0)
+                datos[key_ImagenPrueba2] = InlineImage(st.session_state.doc, buf, Cm(14))
+            else:
+                datos[key_ImagenPrueba2] = None
+                
+            if st.session_state.data['tipoCoordenada'] == "Urbano":
+            
+                if st.session_state.data['latitud'] and st.session_state.data['longitud']:
+                    try:
+                        lat = float(str(datos['latitud']).replace(',', '.'))
+                        lon = float(str(datos['longitud']).replace(',', '.'))
+                        mapa = StaticMap(600, 400)
+                        mapa.add_marker(CircleMarker((lon, lat), 'red', 12))
+                        img_map = mapa.render()
+                        buf_map = io.BytesIO()
+                        img_map.save(buf_map, format='PNG')
+                        buf_map.seek(0)
+                        datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
+                    except Exception as e:
+                        st.error(f"Coordenadas inválidas para el mapa. {e}")
+                else:
+                    st.error("Faltan coordenadas para el mapa.")
+                        
+            else:
+                    
+                if st.session_state.data['latitud'] and st.session_state.data['longitud']:
+                    try:
+                        lat = float(str(st.session_state.data['latitud']).replace(',', '.'))
+                        
+                        lon = float(str(st.session_state.data['longitud']).replace(',', '.'))
+                        
+                        st.warning(f"Prueba de coordenada en modo rural (latitud): {lat}")
+                        st.warning(f"Prueba de coordenada en modo rural (longitud): {lon}")
+                            
+                        png_bytes = get_map_png_bytes(lon, lat, buffer_m=300, zoom=17)
+                            
+                        buf_map = io.BytesIO(png_bytes)
+                        buf_map.seek(0)
+                        datos['imgMapsProyecto'] = InlineImage(st.session_state.doc, buf_map, Cm(18))
+                    except Exception as e:
+                        st.error(f"Coordenadas inválidas para el mapa. {e}")
+                else:
+                    st.error("Faltan coordenadas para el mapa.")
     
+        else:
+            
+            st.error("Ubicación del Transformador no válida.")
 
 
     if st.button("Generar Word"):
